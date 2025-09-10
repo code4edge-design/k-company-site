@@ -4,7 +4,232 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>K-COMPANY | ハウスクリーニング</title>
-  <link rel="stylesheet" href="styles.html.css" />
+  <style>
+/* ========== Tokens ========== */
+:root{
+  --bg: #f5f8ff;
+  --surface: #ffffff;
+  --border: #e6ecfb;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #2b6ef5;
+  --primary-2: #1f5be9;
+  --accent: #1e90ff;
+  --line: #06C755;
+  --radius: 16px;
+  --shadow: 0 12px 32px rgba(15,23,42,.08);
+  --shadow-soft: 0 8px 20px rgba(13,80,160,.07);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text)}
+a{color:inherit;text-decoration:none}
+
+/* ====== Header ====== */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;gap:14px}
+.wrap{max-width:1120px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px}
+.logo-badge{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#67a2ff);color:#fff;font-weight:900}
+.brand-text{display:flex;flex-direction:column;line-height:1}
+.brand-name{font-weight:900}
+.brand-sub{color:#94a3b8;font-size:12px}
+
+/* ハンバーガーメニュー */
+.hamburger{display:none;flex-direction:column;cursor:pointer;padding:8px;gap:4px;background:none;border:none}
+.hamburger span{width:24px;height:3px;background:#334155;border-radius:2px;transition:all 0.3s ease}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px, 6px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px, -6px)}
+
+.menu{display:flex;gap:10px;flex-wrap:wrap}
+.menu a{padding:8px 10px;border-radius:10px;color:#334155;font-weight:700}
+.menu a:hover{background:#eef5ff}
+
+.header-actions{display:flex;align-items:center;gap:10px}
+.header-actions .tel{color:#0b62ff;font-weight:800;white-space:nowrap}
+.small{padding:8px 12px;font-size:14px}
+
+/* レスポンシブ対応 */
+@media (max-width:960px){
+  .hamburger{display:flex}
+  
+  .menu{
+    position:absolute;
+    top:100%;
+    left:0;
+    width:100%;
+    background:rgba(255,255,255,.95);
+    backdrop-filter:blur(8px);
+    flex-direction:column;
+    padding:20px;
+    gap:0;
+    transform:translateY(-10px);
+    opacity:0;
+    visibility:hidden;
+    transition:all 0.3s ease;
+    box-shadow:var(--shadow);
+  }
+  
+  .menu.active{
+    transform:translateY(0);
+    opacity:1;
+    visibility:visible;
+  }
+  
+  .menu a{
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    border-radius:0;
+  }
+  
+  .menu a:last-child{border-bottom:none}
+  
+  .header-actions .small{display:none}
+  
+  .nav-inner{position:relative}
+}
+
+/* ====== Buttons/Chips ====== */
+.btn{border:0;border-radius:10px;padding:12px 18px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(180deg,var(--primary),var(--primary-2));color:#fff;box-shadow:var(--shadow)}
+.btn-ghost{background:#eef5ff;color:#1e3a8a}
+.btn-line{background:#06C755;color:#fff;box-shadow:0 10px 24px rgba(6,199,85,.25)}
+.btn:hover{transform:translateY(-1px)}
+
+.chip{display:inline-flex;align-items:center;gap:6px;font-weight:800;border-radius:999px;padding:6px 10px;font-size:12px}
+.chip.soft{background:#eef5ff;color:#3657c8}
+.chip.soft.orange{background:#fff3e6;color:#c45500}
+.chip.soft.blue{background:#e8f3ff;color:#1661d8}
+.rating{background:#111827;color:#fff}
+
+/* ====== Hero ====== */
+.surface{background:linear-gradient(180deg,#f7fbff,transparent)}
+.hero{padding:28px 0 46px}
+.hero-inner{display:grid;grid-template-columns:1fr 1.05fr;gap:26px;align-items:center;padding:10px 20px}
+.ribbon{display:inline-block;background:#eef5ff;color:#3657c8;font-weight:800;border-radius:999px;padding:6px 12px;margin-bottom:12px}
+.hero h1{font-weight:900;line-height:1.15;margin:0 0 10px;font-size:clamp(28px,5.5vw,44px)}
+.hero h1 .accent{color:#2563eb}
+.lede{color:var(--muted);margin:0 0 14px}
+.feature-pills{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px;padding:0;list-style:none}
+.feature-pills li{background:#fff;border:1px solid var(--border);border-radius:999px;padding:8px 12px;font-weight:800;color:#1f2937;box-shadow:0 6px 18px rgba(13,80,160,.06)}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.metrics{display:flex;gap:24px;list-style:none;padding:0;margin:14px 0 0;color:#334155}
+.metrics li{display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.metrics strong{font-size:20px;color:#111827}
+
+.photo-card{position:relative;background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.photo-card img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
+.photo-card figcaption{padding:8px 12px;color:#475569}
+.photo-card .chip{position:absolute;top:10px;right:10px}
+.photo-card .chip.line{right:auto;left:10px;background:#06C755;color:#fff}
+
+@media (max-width:960px){
+  .hero-inner{grid-template-columns:1fr}
+}
+
+/* ====== Sections ====== */
+.section{padding:64px 0}
+.section-subtag{color:#6b7280;font-weight:800;text-align:center;margin-bottom:6px}
+.section-subtag.left{text-align:left}
+.section-title{font-size:28px;font-weight:900;text-align:center;margin:0 0 8px}
+.section-title.left{text-align:left}
+.section-title.xl{font-size:30px}
+.section-title .accent{color:#2b6ef5}
+.section-lead{max-width:760px;margin:0 auto 20px;text-align:center;color:#6b7280}
+
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:980px){.cards{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.cards{grid-template-columns:1fr}}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow-soft)}
+.card-head{display:flex;justify-content:space-between;margin-bottom:8px}
+.card h3{margin:6px 0 6px}
+.muted{color:#64748b}
+.muted.small{font-size:14px}
+.price{font-weight:900;color:#1d4ed8;margin:6px 0 8px}
+.price span{color:#64748b;margin-left:6px;font-weight:600}
+.bullets{margin:0 0 10px 18px;color:#475569}
+.card-cta{display:flex;justify-content:flex-end}
+
+/* ====== About ====== */
+.about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start;padding:0 20px}
+@media (max-width:980px){.about-grid{grid-template-columns:1fr}}
+.mini-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.mini-card{background:#f6f8ff;border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;box-shadow:var(--shadow-soft)}
+.mini-card strong{font-size:18px}
+.strength h4{margin:10px 0 6px}
+.strength ul{margin:0 0 12px 18px;color:#475569}
+.info-cards{display:grid;gap:16px;margin-top:8px}
+.info-card{display:grid;grid-template-columns:48px 1fr;grid-auto-rows:auto;align-items:center;padding:16px;border-radius:16px;box-shadow:var(--shadow-soft);border:1px solid var(--border);background:#ffffff80}
+.info-card .ic{width:40px;height:40px;border-radius:999px;display:grid;place-items:center;background:#fff;border:1px solid var(--border);box-shadow:0 6px 16px rgba(15,23,42,.08);font-size:18px}
+.info-card b{grid-column:2;font-size:16px;margin:0 0 4px;font-weight:900;color:#0f172a}
+.info-card p{grid-column:2;margin:0;color:#455468;line-height:1.7}
+.info-card.blue{background:#eaf2ff}
+.info-card.green{background:#eafff0}
+.info-card.pink{background:#fff0f6}
+.info-card.blue .ic{border-color:#c7daff}
+.info-card.green .ic{border-color:#c8f4dc}
+.info-card.pink .ic{border-color:#ffd6ea}
+.photo-card.tight{box-shadow:var(--shadow)}
+.photo-card.tight .chip.soft{position:absolute;left:16px;bottom:-18px;background:#fff;color:#ef4444;border:1px solid var(--border);padding:10px 14px;box-shadow:var(--shadow)}
+
+/* ====== Estimate ====== */
+.center{text-align:center}
+.estimate-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;padding:0 20px}
+@media (max-width:980px){.estimate-grid{grid-template-columns:1fr}}
+.form-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.form-title{margin:0 0 6px}
+.stack{display:flex;flex-direction:column}
+.gap8{gap:8px}
+
+.grid{display:grid;gap:12px}
+.grid-2{grid-template-columns:1fr 1fr}
+@media (max-width:720px){.grid-2{grid-template-columns:1fr}}
+.input, .contact-form textarea, .contact-form select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid var(--border);background:#fff;outline:none}
+.input:focus, .contact-form textarea:focus, .contact-form select:focus{box-shadow:0 0 0 4px rgba(37,99,235,.18);border-color:#98c7ff}
+
+.side-column{display:grid;gap:12px}
+.contact-cards{display:grid;gap:10px}
+.contact-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:12px;border-radius:12px;border:1px solid var(--border);background:#fff}
+.contact-card.line{background:#eafff0}
+.contact-card.phone{background:#eaf1ff}
+.contact-card.mail{background:#f4f6ff}
+.contact-card.area{background:#f2f9ff}
+.contact-card.fee{background:#fff8f0}
+.contact-card .pill{background:#06C755;color:#fff;border-radius:999px;padding:6px 10px;font-weight:800}
+.mini-hints{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{border:1px solid var(--border);border-radius:12px;padding:12px;background:#fff}
+.hint.green{background:#eafff0}
+.hint.purple{background:#f5f0ff}
+
+/* ====== FAQ ====== */
+.faq{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:800;color:#1f2937}
+.faq p{margin:8px 0 0;color:#475569}
+
+/* ====== Footer ====== */
+.footer{background:#0b1930;color:#c9ddff;margin-top:32px}
+.footer-grid{display:grid;grid-template-columns:1.1fr .9fr .9fr;gap:24px;padding:30px 20px}
+@media (max-width:980px){.footer-grid{grid-template-columns:1fr}}
+.ft-desc{color:#98b7ff}
+.link-list{margin:0;padding-left:18px}
+.link-list a{color:#cfe0ff}
+.sns-row{display:flex;gap:6px;margin-top:6px}
+.footer-cta-row{display:flex;gap:10px;margin-top:10px}
+.copy-row{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-top:1px solid rgba(255,255,255,.1)}
+
+/* ====== Floating LINE ====== */
+.line-fab{position:fixed;right:18px;bottom:18px;display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--line);color:#fff;border-radius:999px;font-weight:900;box-shadow:0 16px 36px rgba(6,199,85,.35);z-index:60}
+.line-fab svg{width:24px;height:24px}
+
+/* ====== Reveal ====== */
+.reveal{opacity:0;transform:translateY(12px);transition:all .6s cubic-bezier(.2,.8,.2,1)}
+.reveal.show{opacity:1;transform:none}
+.delay-1{transition-delay:.06s}
+.delay-2{transition-delay:.12s}
+  </style>
 </head>
 <body>
   <!-- ====== Header ====== -->
@@ -16,14 +241,22 @@
           <span class="brand-sub">ハウスクリーニング</span>
         </div>
       </div>
-      <nav class="menu">
+      
+      <!-- ハンバーガーボタン -->
+      <button class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <nav class="menu" id="menu">
         <a href="#top">ホーム</a>
         <a href="#services">サービス</a>
         <a href="#about">私たちについて</a>
-        <!--<a href="#faq">よくある質問</a>-->
         <a href="#estimate">お見積もり</a>
         <a href="#estimate">お問い合わせ</a>
       </nav>
+      
       <div class="header-actions">
         <a class="tel" href="tel:0120123456">📞 0120-123-456</a>
         <a class="btn btn-line small" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">LINE相談</a>
@@ -42,7 +275,6 @@
 
         <ul class="feature-pills">
           <li>満足度98%</li>
-         <!-- <li>国家資格保有</li>-->
           <li>即日見積り</li>
           <li>保障・賠償付き</li>
         </ul>
@@ -59,11 +291,10 @@
           <li><strong>98%</strong><span>満足度</span></li>
         </ul>
       </div>
-      
 
       <div class="hero-right">
         <figure class="photo-card">
-          <img src="バスタブ掃除2.png" alt="" />
+          <img src="バスタブ掃除2.png" alt="プロの清掃スタッフ" />
           <div class="chip rating">★ 4.9/5.0 <span>お客様評価</span></div>
           <a class="chip line" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">LINE予約</a>
         </figure>
@@ -89,7 +320,7 @@
             <li>使用洗剤：人と環境にやさしいもの</li>
             <li>エリア：鹿児島/熊本/宮崎</li>
           </ul>
-          <div class="card-cta"><a class="btn btn-primary" data-scroll="#estimate">見積り依頼</a></div>
+          <div class="card-cta"><a class="btn btn-primary" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">LINEで相談</a></div>
         </article>
 
         <article class="card service reveal delay-1">
@@ -101,7 +332,7 @@
             <li>作業内容：レンジ・シンク・換気扇の分解洗浄</li>
             <li>防カビ・撥水コート対応</li>
           </ul>
-          <div class="card-cta"><a class="btn btn-primary" data-scroll="#estimate">見積りを依頼</a></div>
+          <div class="card-cta"><a class="btn btn-primary" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">LINEで相談</a></div>
         </article>
 
         <article class="card service reveal delay-2">
@@ -113,9 +344,10 @@
             <li>鏡のウロコ落とし・排水口洗浄</li>
             <li>防カビコーティング</li>
           </ul>
-          <div class="card-cta"><a class="btn btn-primary" data-scroll="#estimate">見積りを依頼</a></div>
+          <div class="card-cta"><a class="btn btn-primary" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">LINEで相談</a></div>
         </article>
-        <article class="card service reveal delay-3">
+
+        <article class="card service reveal">
           <div class="card-head"><div class="chip soft">空調</div></div>
           <h3>エアコンクリーニング</h3>
           <p class="muted">内部洗浄でカビ・臭いを徹底除去。電気効率もアップ</p>
@@ -124,10 +356,10 @@
             <li>分解高圧洗浄・防カビ抗菌仕上げ</li>
             <li>お掃除機能付きも対応</li>
           </ul>
-          <div class="card-cta"><a class="btn btn-primary" data-scroll="#estimate">見積りを依頼</a></div>
+          <div class="card-cta"><a class="btn btn-primary" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">LINEで相談</a></div>
         </article>
 
-        <article class="card service reveal delay-4">
+        <article class="card service reveal delay-1">
           <div class="card-head"><div class="chip soft">窓・外装</div></div>
           <h3>窓・網戸クリーニング</h3>
           <p class="muted">外側の水アカ・砂埃までスッキリ。お部屋が明るく</p>
@@ -136,11 +368,11 @@
             <li>サッシ・レールまで徹底清掃</li>
             <li>撥水コートオプションあり</li>
           </ul>
-          <div class="card-cta"><a class="btn btn-primary" data-scroll="#estimate">見積りを依頼</a></div>
+          <div class="card-cta"><a class="btn btn-primary" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">LINEで相談</a></div>
         </article>
 
-        <article class="card service reveal delay-5">
-          <div class="card-head"><div class="chip soft blue">引越し</div></div>
+        <article class="card service reveal delay-2">
+          <div class="card-head"><div class="chip soft">引越し</div></div>
           <h3>引越し前後クリーニング</h3>
           <p class="muted">入退去時の徹底清掃。原状回復・入居前の衛生対策に</p>
           <div class="price">18,000円〜 <span>3-5時間</span></div>
@@ -148,20 +380,19 @@
             <li>水回り・床・窓・ベランダまで一式</li>
             <li>スケジュール柔軟に対応</li>
           </ul>
-          <div class="card-cta"><a class="btn btn-primary" data-scroll="#estimate">見積りを依頼</a></div>
+          <div class="card-cta"><a class="btn btn-primary" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">LINEで相談</a></div>
         </article>
-
       </div>
     </div>
   </section>
 
-  <!-- ====== About / Quality Trust ====== -->
+  <!-- ====== About ====== -->
   <section class="section surface" id="about">
     <div class="wrap about-grid">
       <div class="about-left reveal">
         <div class="section-subtag left">私たちについて</div>
         <h2 class="section-title xl left">品質と<span class="accent">信頼</span>で<br>お客様の快適な暮らしを<br>サポートしています</h2>
-        <p class="muted">K-COMPANYは「お客様の暮らしを整え快適な住環境の実現」を理念に、プロフェッショナルなハウスクリーニングサービスを提供しています。経験豊富なスタッフと最新の清掃技術で、多くのお客様にご満足いただいています。</p>
+        <p class="muted">K-COMPANYは、「お客様の暮らしを整え快適な住環境の実現」を理念に、プロフェッショナルなハウスクリーニングサービスを提供しています。経験豊富なスタッフと最新の清掃技術で、多くのお客様にご満足いただいています。</p>
 
         <div class="mini-cards">
           <div class="mini-card"><strong>3,000+</strong><span>累計施工件数</span></div>
@@ -191,14 +422,14 @@
 
         <div class="info-cards">
           <div class="info-card blue"><span class="ic">🛡️</span><b>信頼と安心</b><p>身元確認済みスタッフによる安心・安全なサービスを提供</p></div>
-          <div class="info-card green"><span class="ic">🕒</span><b>迅速対応</b><p>お客様のご要望に合わせ、最短即日でのサービス提供が可能</p></div>
+          <div class="info-card green"><span class="ic">🕐</span><b>迅速対応</b><p>お客様のご要望に合わせ、最短即日でのサービス提供が可能</p></div>
           <div class="info-card pink"><span class="ic">✨</span><b>高品質保証</b><p>研修を受けた自社プロスタッフによる、確かな美観の仕上がりをお約束</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== Estimate / Contact Big ====== -->
+  <!-- ====== Estimate ====== -->
   <section class="section" id="estimate">
     <div class="wrap center">
       <div class="section-subtag">お見積もり</div>
@@ -207,7 +438,6 @@
     </div>
 
     <div class="wrap estimate-grid">
-      <!-- Left: Form -->
       <div class="form-card reveal">
         <h3 class="form-title">見積もり依頼フォーム</h3>
         <p class="muted small">必要事項をご入力ください。2営業日以内にご連絡いたします。</p>
@@ -217,15 +447,15 @@
             <input class="input" required placeholder="090-1234-5678">
             <input class="input" type="email" required placeholder="メールアドレス">
             <select class="input" name="service" required>
-  <option value="" selected disabled hidden>ご希望サービスを選択</option>
-    <option value="house">一般住宅クリーニング</option>
-    <option value="aircom">エアコンクリーニング</option>
-  <option value="kitchen">キッチンクリーニング</option>
-  <option value="bath_toilet">バス・トイレクリーニング</option>
-  <option value="window_screen">窓・網戸クリーニング</option>
-  <option value="move">引っ越し前後クリーニング</option>
-  <option value="other">その他</option>
-</select>
+              <option value="" selected disabled hidden>ご希望サービスを選択</option>
+              <option value="house">一般住宅クリーニング</option>
+              <option value="kitchen">キッチンクリーニング</option>
+              <option value="bath_toilet">バス・トイレクリーニング</option>
+              <option value="aircon">エアコンクリーニング</option>
+              <option value="window">窓・網戸クリーニング</option>
+              <option value="moving">引越し前後クリーニング</option>
+              <option value="other">その他</option>
+            </select>
           </div>
           <input class="input" placeholder="ご住所・建物種別（任意）">
           <textarea class="input" rows="3" placeholder="お困りごと・ご希望など（任意）"></textarea>
@@ -238,7 +468,6 @@
         </form>
       </div>
 
-      <!-- Right: Sidebar -->
       <aside class="side-column reveal delay-1">
         <figure class="photo-card tight">
           <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=1200&auto=format&fit=crop" alt="">
@@ -249,7 +478,7 @@
           <a class="contact-card line" href="https://lin.ee/your-shortcode" target="_blank" rel="noopener">
             <div class="left">🟢</div>
             <div class="right"><b>LINEでのお問い合わせ</b><p>@kcompany / 24時間・自動応答で受付</p></div>
-            <span class="pill">友だち追加</span>
+            <span class="pill">友達追加</span>
           </a>
 
           <a class="contact-card phone" href="tel:0120123456">
@@ -313,7 +542,6 @@
           <li><a href="#top">ホーム</a></li>
           <li><a href="#services">サービス一覧</a></li>
           <li><a href="#about">私たちについて</a></li>
-      <!--   <li><a href="#faq">よくある質問</a></li> --> 
           <li><a href="#estimate">お見積もり</a></li>
           <li><a href="#contact">お問い合わせ</a></li>
         </ul>
@@ -345,6 +573,60 @@
     <span>LINE</span>
   </a>
 
-  <script src="main.html.js"></script>
+  <script>
+    // Smooth scroll for CTA and header/footer links
+    document.querySelectorAll('[data-scroll], .menu a, .footer .link-list a').forEach(el => {
+      el.addEventListener('click', e => {
+        const href = el.getAttribute('data-scroll') || el.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+            
+            // モバイルメニューを閉じる
+            const menu = document.getElementById('menu');
+            const hamburger = document.getElementById('hamburger');
+            if (menu && hamburger) {
+              menu.classList.remove('active');
+              hamburger.classList.remove('active');
+            }
+          }
+        }
+      });
+    });
+
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const menu = document.getElementById('menu');
+    
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      menu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!hamburger.contains(e.target) && !menu.contains(e.target)) {
+        hamburger.classList.remove('active');
+        menu.classList.remove('active');
+      }
+    });
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+    },{threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Fake submits
+    ['contactForm','estimateForm'].forEach(id=>{
+      const form = document.getElementById(id);
+      form?.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        alert('送信しました。追ってご連絡いたします。');
+      });
+    });
+  </script>
 </body>
 </html>
